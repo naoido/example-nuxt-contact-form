@@ -100,7 +100,6 @@ export default {
             this.$router.push('/contact/');
         },
         validateCompletedForm() {
-            console.log((!this.contents.name.isEmpty && this.contents.mail.isEmail && !this.contents.content.isEmpty))
             this.submitDisabled = !(!this.contents.name.isEmpty && this.contents.mail.isEmail && !this.contents.content.isEmpty);
         },
         validateEmail(event) {
