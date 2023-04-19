@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-center content-center">
-      <Form :title="title" :contact="contact" :submit="submit" :edit="true" />
+      <Form :title="title" :contact="contact" :submit="submit" :edit="true" ref="form" />
     </div>
 </template>
 
