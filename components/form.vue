@@ -5,8 +5,8 @@
             <span class="block text-sm font-medium text-slate-700">
                 お名前(姓名)
             </span>
-            <input type="text" v-model="contact.name" :disabled="!edit" @input="validateEmpty" id="name"
-            :class="[this.contents.name.isEmpty && this.contents.name.flag ? 'border-red-500 border-slate-200' : '']"
+            <input type="text" v-model="contact.name" :disabled="!edit" @input="validateEmpty" id="name" maxlength="30"
+            :class="[this.contents.name.isValid && this.contents.name.flag ? 'border-red-500 border-slate-200' : '']"
             class="my-3 mt-1 block w-full px-3 py-2 bg-wmt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
             disabled:bg-gray-600 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
@@ -16,8 +16,8 @@
             <span class="block text-sm font-medium text-slate-700">
                 ご連絡先(e-mail)
             </span>
-            <input type="text" v-model="contact.mail" :disabled="!edit" @input="validateEmail" id="mail"
-            :class="[!this.contents.mail.isEmail && this.contents.mail.flag ? 'border-red-500 border-slate-200' : '']"
+            <input type="text" v-model="contact.mail" :disabled="!edit" @input="validateEmail" id="mail" maxlength="100"
+            :class="[!this.contents.mail.isValid && this.contents.mail.flag ? 'border-red-500 border-slate-200' : '']"
             class="my-3 mt-1 block w-full px-3 py-2 bg-wmt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
             !disabled:bg-gray-600 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
@@ -28,7 +28,7 @@
                 内容(2000文字以内)
             </span>
             <textarea type="text" v-model="contact.content" :disabled="!edit" maxlength="2000" @input="validateEmpty" id="content"
-            :class="[this.contents.content.isEmpty && this.contents.content.flag ? 'border-red-500 border-slate-200' : '']"
+            :class="[this.contents.content.isValid && this.contents.content.flag ? 'border-red-500 border-slate-200' : '']"
             class="my-3 mt-1 block w-full px-3 py-2 bg-wmt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             resize-none
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
@@ -74,15 +74,15 @@ export default {
             contents: {
                 name: {
                     flag: false,
-                    isEmpty: true
+                    isValid: true
                 },
                 mail: {
                     flag: false,
-                    isEmail: false
+                    isValid: false
                 },
                 content: {
                     flag: false,
-                    isEmpty: true
+                    isValid: true
                 }
             },
             submitDisabled: true
@@ -90,9 +90,9 @@ export default {
     },
     created() {
         this.submitDisabled = this.title === "お問い合わせフォーム";
-        this.contents.name.isEmpty = !(this.contact.name.length > 0);
-        this.contents.mail.isEmail = this.contact.mail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
-        this.contents.content.isEmpty = !(this.contact.content.length > 0);
+        this.contents.name.isValid = !(this.contact.name.length > 30 || this.contact.name.length > 0);
+        this.contents.mail.isValid = this.contact.mail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+        this.contents.content.isValid = !(this.contact.content.length > 2000 || this.contact.content.length > 0);
         this.validateCompletedForm();
     },
     methods: {
@@ -100,24 +100,25 @@ export default {
             this.$router.push('/contact/');
         },
         validateCompletedForm() {
-            this.submitDisabled = !(!this.contents.name.isEmpty && this.contents.mail.isEmail && !this.contents.content.isEmpty);
+            this.submitDisabled = !(!this.contents.name.isValid && this.contents.mail.isValid && !this.contents.content.isValid);
         },
         validateEmail(event) {
             const mail = event.target.value;
             this.contents.mail.flag = true;
-            this.contents.mail.isEmail = mail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+            this.contents.mail.isValid = mail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
             this.validateCompletedForm();
         },
         validateEmpty(event) {
-            const isEmpty = event.target.value.length === 0;
+            const length = event.target.value.length;
+            const isEmpty = length === 0;
             const id = event.target.id;
             switch(id) {
                 case "name":
-                    this.contents.name.isEmpty = isEmpty;
+                    this.contents.name.isValid = (isEmpty || length > 30);
                     this.contents.name.flag = true;
                     break;
                 case "content":
-                    this.contents.content.isEmpty = isEmpty;
+                    this.contents.content.isValid = (isEmpty || length > 2000);
                     this.contents.content.flag = true;
                     break;
             };

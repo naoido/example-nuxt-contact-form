@@ -24,12 +24,6 @@ export default {
     created() {
         const getContact = this.$store.getters["contact/getContact"];
 
-        if (getContact.content.length > 100) {
-            const erroe = new Error("Bad Request");
-            error.statusCode = 400;
-            throw error;
-        }
-
         if(getContact.name === "" || getContact.mail === "" || getContact.content === "") {
             this.$nuxt.context.redirect('/contact/');
         }

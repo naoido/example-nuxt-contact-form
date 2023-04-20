@@ -6,7 +6,9 @@ export const state = () => ({
 
 export const mutations = {
     add(state, contact) { 
-        if(contact.content.length > 2000) throw {statusCode: 400, message: 'Bad Request'};
+        if(contact.content.length > 2000 || 
+            !contact.mail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) || 
+            contact.name.length > 30) throw {statusCode: 400, message: 'Bad Request'};
         state.name = contact.name;
         state.mail = contact.mail;
         state.content = contact.content;
