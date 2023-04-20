@@ -17,6 +17,12 @@ export default {
     ]
   },
 
+  error: {
+    statusCode: 400,
+    message: "Bad Request",
+    path: "/contact"
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/css/transition.css'

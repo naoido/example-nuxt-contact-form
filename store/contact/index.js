@@ -6,10 +6,10 @@ export const state = () => ({
 
 export const mutations = {
     add(state, contact) { 
-        state.name = contact.name,
-        state.mail = contact.mail,
-        state.type = contact.type,
-        state.content = contact.content
+        if(contact.content.length > 2000) throw {statusCode: 400, message: 'Bad Request'};
+        state.name = contact.name;
+        state.mail = contact.mail;
+        state.content = contact.content;
     },
     remove(state) {
         state.name = '';
