@@ -35,7 +35,7 @@ export const actions = {
         commit("remove");
         commit("add", contact);
     },
-    removeAction({commit, dispatch, state}, payload) {
+    removeAction({commit, dispatch, state}, contact) {
         commit('remove');
     }
 }

@@ -33,7 +33,7 @@ export default {
         this.contact.mail = getContact.mail;
         this.contact.content = getContact.content;
 
-        this.$store.dispatch('contact/removeAction', this.contact);
+        this.$store.dispatch("contact/removeAction", this.contact);
     }
 }
 </script>
