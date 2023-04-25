@@ -29,9 +29,7 @@ export default {
             this.$nuxt.context.redirect('/contact/');
         }
 
-        this.contact.name = getContact.name;
-        this.contact.mail = getContact.mail;
-        this.contact.content = getContact.content;
+        this.contact = getContact;
 
         this.$store.dispatch("contact/removeAction", this.contact);
     }

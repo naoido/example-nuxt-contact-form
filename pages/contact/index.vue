@@ -23,9 +23,7 @@ export default {
     },
     created() {
         const getContact = this.$store.getters["contact/getContact"];
-        this.contact.name = getContact.name;
-        this.contact.mail = getContact.mail;
-        this.contact.content = getContact.content;
+        this.contact = getContact;
     },
     methods: {
         submit() {
