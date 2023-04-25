@@ -22,14 +22,18 @@ export default {
         edit: false
         }
     },
-    created() {
+    async created() {
         const getContact = this.$store.getters["contact/getContact"];
 
         if(getContact.name === "" || getContact.mail === "" || getContact.content === "") {
             this.$nuxt.context.redirect('/contact/');
+            return;
         }
 
         this.contact = getContact;
+        await this.$axios.post("/api/contact", {
+            content: this.contact
+        });
 
         this.$store.dispatch("contact/removeAction", this.contact);
     }

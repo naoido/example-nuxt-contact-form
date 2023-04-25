@@ -17,6 +17,13 @@ export default {
     ]
   },
 
+  serverMiddleware: [
+    {
+      path: "/api",
+      handler: "~/api/contact.js"
+    }
+  ],
+
   error: {
     statusCode: 400,
     message: "Bad Request",
@@ -43,6 +50,7 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    "@nuxtjs/axios"
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
