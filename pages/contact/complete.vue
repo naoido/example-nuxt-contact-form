@@ -6,10 +6,31 @@
 
 <script>
 import Form from "@/components/form.vue"
+import crypto from "crypto-js"
 
 export default {
     component: {
         Form
+    },
+    async asyncData({ redirect, $axios, store }) {
+        const contact = store.state.contact;
+
+        if ((contact.content.length > 2000 || 
+            !contact.mail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) || 
+            contact.name.length > 30)) {
+                redirect("/contact");
+                return;
+        }
+
+        const password = "password";
+        const token = crypto.AES.encrypt(String(Math.floor(Date.now() / 100)), password);
+
+        console.log(await $axios.$post("/api/contact", { 
+            headers: {
+                Authorization: `Bearer ${token}`,
+                contact: contact
+            }
+        }));
     },
     data() {
         return {
@@ -25,15 +46,7 @@ export default {
     async created() {
         const getContact = this.$store.getters["contact/getContact"];
 
-        if(getContact.name === "" || getContact.mail === "" || getContact.content === "") {
-            this.$nuxt.context.redirect('/contact/');
-            return;
-        }
-
         this.contact = getContact;
-        await this.$axios.post("/api/contact", {
-            content: this.contact
-        });
 
         this.$store.dispatch("contact/removeAction", this.contact);
     }

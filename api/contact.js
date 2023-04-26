@@ -1,21 +1,34 @@
 import fs from "fs";
 import crypto from "crypto";
+import CryptoJS from "crypto-js";
 import express from "express";
 
-const app = express();
+const router = express.Router();
 const path = "./data/contacts.json";
 
-app.use(express.json());
+router.use(express.json());
 
-app.post("/contact", (req, res) => {
-    console.log(req.body);
-    const data = JSON.parse(fs.readFileSync(path, "utf-8"));
-    const uuid = crypto.randomUUID();
-    console.log(uuid);
+router.post("/", (req, res) => {
+    const timestamp = Math.floor( Date.now() / 100 );
+    const token = req.headers.pass;
+    if (token == undefined) {
+        res.status(403);
+        res.end();
+        return;
+    }
 
-    data[uuid] = req.body.content;
+    if (CryptoJS.AES.decrypt(req.headers.pass.split(" ")[1], password).toString(CryptoJS.enc.Utf8) == timestamp) {
+        const data = JSON.parse(fs.readFileSync(path, "utf-8"));
+        const uuid = crypto.randomUUID();
 
-    fs.writeFileSync(path, JSON.stringify(data));
+        data[uuid] = req.body.content;
+
+        fs.writeFileSync(path, JSON.stringify(data));
+        res.end();
+    } else {
+        res.status(403);
+        res.end();
+    }
 });
 
-module.exports = app;
+module.exports = router;

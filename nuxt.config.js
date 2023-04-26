@@ -20,7 +20,7 @@ export default {
   serverMiddleware: [
     {
       path: "/api",
-      handler: "~/api/contact.js"
+      handler: "~/api/handle.js"
     }
   ],
 
