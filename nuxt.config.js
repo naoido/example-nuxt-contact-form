@@ -20,7 +20,7 @@ export default {
   serverMiddleware: [
     {
       path: "/api",
-      handler: "~/api/contact.js"
+      handler: "~/api/handle.js"
     }
   ],
 
@@ -52,6 +52,10 @@ export default {
   modules: [
     "@nuxtjs/axios"
   ],
+
+  render: {
+    ssr: true
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
