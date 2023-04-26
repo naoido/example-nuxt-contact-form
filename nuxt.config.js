@@ -53,6 +53,10 @@ export default {
     "@nuxtjs/axios"
   ],
 
+  render: {
+    ssr: true
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }

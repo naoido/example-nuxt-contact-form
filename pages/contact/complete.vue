@@ -23,14 +23,11 @@ export default {
         }
 
         const password = "password";
-        const token = crypto.AES.encrypt(String(Math.floor(Date.now() / 100)), password);
 
-        console.log(await $axios.$post("/api/contact", { 
-            headers: {
-                Authorization: `Bearer ${token}`,
-                contact: contact
-            }
-        }));
+        const data = { "contact" : contact }
+        const headers = { "Authorization" : `Bearer ${crypto.AES.encrypt(String(Math.floor( Date.now() / 100 )), password)}` }
+
+        await $axios.$post("/api/contact", data, { headers });
     },
     data() {
         return {

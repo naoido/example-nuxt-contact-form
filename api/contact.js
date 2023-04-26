@@ -5,29 +5,34 @@ import express from "express";
 
 const router = express.Router();
 const path = "./data/contacts.json";
+const password = "password"
 
 router.use(express.json());
 
 router.post("/", (req, res) => {
     const timestamp = Math.floor( Date.now() / 100 );
-    const token = req.headers.pass;
+    let token = req.headers.authorization;
+
     if (token == undefined) {
         res.status(403);
         res.end();
         return;
-    }
-
-    if (CryptoJS.AES.decrypt(req.headers.pass.split(" ")[1], password).toString(CryptoJS.enc.Utf8) == timestamp) {
-        const data = JSON.parse(fs.readFileSync(path, "utf-8"));
-        const uuid = crypto.randomUUID();
-
-        data[uuid] = req.body.content;
-
-        fs.writeFileSync(path, JSON.stringify(data));
-        res.end();
     } else {
-        res.status(403);
-        res.end();
+        token = token.split(" ");
+        if (token[0] == "Bearer" && CryptoJS.AES.decrypt(token[1], password).toString(CryptoJS.enc.Utf8) == timestamp) {
+           const data = JSON.parse(fs.readFileSync(path, "utf-8"));
+           const uuid = crypto.randomUUID();
+
+           data[uuid] = req.body.contact;
+   
+           fs.writeFileSync(path, JSON.stringify(data));
+   
+           res.end();
+           return;
+       } else {
+           res.status(403);
+           res.end();
+       }
     }
 });
 
