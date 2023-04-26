@@ -15,11 +15,19 @@ export default {
     async asyncData({ redirect, $axios, store }) {
         const contact = store.state.contact;
 
+<<<<<<< HEAD
         if (contact.content.length > 2000 || 
             !contact.mail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) || 
             contact.name.length > 30) {
             redirect("/contact");
             return;
+=======
+        if ((contact.content.length > 2000 || 
+            !contact.mail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) || 
+            contact.name.length > 30)) {
+                redirect("/contact");
+                return;
+>>>>>>> c1592745e2e98ac5169bdfdd832f73ff6bccce43
         }
 
         const password = "password";
