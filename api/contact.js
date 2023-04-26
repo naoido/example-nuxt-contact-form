@@ -10,7 +10,7 @@ const password = "password"
 router.use(express.json());
 
 router.post("/", (req, res) => {
-    const timestamp = Math.floor( Date.now() / 100 );
+    const timestamp = Math.floor( Date.now() / 1000 );
     let token = req.headers.authorization;
 
     if (token == undefined) {

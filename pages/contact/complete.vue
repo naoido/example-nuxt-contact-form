@@ -23,7 +23,7 @@ export default {
         const password = "password";
 
         const data = { "contact" : contact }
-        const headers = { "Authorization" : `Bearer ${crypto.AES.encrypt(String(Math.floor( Date.now() / 100 )), password)}` }
+        const headers = { "Authorization" : `Bearer ${crypto.AES.encrypt(String(Math.floor( Date.now() / 1000 )), password)}` }
 
         await $axios.$post("/api/contact", data, { headers });
     },
